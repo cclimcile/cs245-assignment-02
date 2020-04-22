@@ -17,9 +17,8 @@ public class ShoppingList {
         /* populate a ShoppingService array that holds basic information on each delivery service */
         int index = 0;
         while(scanner.hasNextLine()){
-            String config = scanner.nextLine();
-            String[] split = config.split("=");
-            String[] tokens = split[1].split(",");
+            String[] config = scanner.nextLine().split("=");
+            String[] tokens = config[1].split(",");
             ShoppingService service = new ShoppingService(tokens[0], tokens[1], Double.parseDouble(tokens[2]));
             services[index] = service;
             service.printShoppingService();
@@ -32,12 +31,22 @@ public class ShoppingList {
             File csv_file = new File(services[i].csv_file);
             Scanner csv_scanner = new Scanner(csv_file);
             while(csv_scanner.hasNextLine()){
-                String csv = scanner.nextLine();
-                System.out.println(csv);
-//                String[] tokens = csv.split(",");
-//
-//                String key = tokens[0];
-//                ShoppingItem new_item = new ShoppingItem(key, tokens[1], Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
+                String[] csv = csv_scanner.nextLine().split(",");
+                String key = csv[0];
+
+                /* adjust variables to correct types */
+                String[] size_str = csv[2].split("oz");
+                double size = Double.parseDouble(size_str[0]);
+                String price_str = csv[3].substring(1);
+                double price = Double.parseDouble(price_str);
+
+                System.out.println("Brand: " + key);
+                System.out.println("Item: " + csv[1]);
+                System.out.println("Size: " + size + " oz");
+                System.out.println("Price: $" + price);
+                System.out.println();
+
+//                ShoppingItem new_item = new ShoppingItem(key, csv[1], size, price);
 //                services[i].hashtable.put(key, new_item);
 //                new_item.printShoppingItem();
             }
@@ -57,6 +66,7 @@ public class ShoppingList {
             services[0].total_price += services[0].searchPrice(key, size);
             services[1].total_price += services[1].searchPrice(key, size);
             services[2].total_price += services[2].searchPrice(key, size);
+            System.out.println("Added to cart.\n");
         }
 
         /* add delivery fee */

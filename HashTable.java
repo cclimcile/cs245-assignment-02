@@ -22,7 +22,7 @@ public class HashTable {
         /* calculate hashCode */
         int hashCode = sum % listLength;
 
-        return sum;
+        return hashCode;
     }
 
     /**
