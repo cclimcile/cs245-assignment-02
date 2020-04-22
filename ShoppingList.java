@@ -4,8 +4,11 @@ import java.io.*;
 public class ShoppingList {
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("---- Welcome to ALaCarte! ----\n");
-        ShoppingService[] services = new ShoppingService[2];
+        System.out.println("-----------------------------");
+        System.out.println("\tWelcome to ALaCarte");
+        System.out.println("-----------------------------");
+
+        ShoppingService[] services = new ShoppingService[3];
         /* read in the config.txt */
         System.out.println("Reading in config.txt...");
         File config_file = new File("config.txt");
@@ -30,13 +33,49 @@ public class ShoppingList {
             Scanner csv_scanner = new Scanner(csv_file);
             while(csv_scanner.hasNextLine()){
                 String csv = scanner.nextLine();
-                String[] tokens = csv.split(",");
-
-                String key = tokens[0];
-                ShoppingItem new_item = new ShoppingItem(key, tokens[1], Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
-                services[i].hashtable.put(key, new_item);
-                new_item.printShoppingItem();
+                System.out.println(csv);
+//                String[] tokens = csv.split(",");
+//
+//                String key = tokens[0];
+//                ShoppingItem new_item = new ShoppingItem(key, tokens[1], Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
+//                services[i].hashtable.put(key, new_item);
+//                new_item.printShoppingItem();
             }
         }
+
+        Scanner shoppingScanner = new Scanner(System.in);
+        System.out.println("Let's start your shopping list.\n");
+        String response = "";
+        while(!response.equals("done")){
+            System.out.println("Enter your item or 'done': ");
+            response = shoppingScanner.next();
+            String key = response;
+            System.out.println("Size: ");
+            double size = shoppingScanner.nextInt();
+
+            /* search through all the services */
+            services[0].total_price += services[0].searchPrice(key, size);
+            services[1].total_price += services[1].searchPrice(key, size);
+            services[2].total_price += services[2].searchPrice(key, size);
+        }
+
+        /* add delivery fee */
+        services[0].total_price += services[0].delivery_charge;
+        services[1].total_price += services[1].delivery_charge;
+        services[2].total_price += services[2].delivery_charge;
+
+        ShoppingService bestService = services[0];
+        double bestPrice = services[0].total_price;
+        for( int j = 1; j < services.length; j++){
+            if( services[j].total_price < bestPrice){
+                bestService = services[j];
+                bestPrice = services[j].total_price;
+            }
+        }
+
+        System.out.println("Best price through " + bestService.service + ". Your total cost: $" + bestPrice);
+
     }
 }
+
+
