@@ -1,0 +1,2 @@
+service=Prime,amazon.csv,4.00
+service=Target,target.csv,2.00
