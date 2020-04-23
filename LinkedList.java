@@ -2,7 +2,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class LinkedList {
+public class  LinkedList {
 
     private int size;
     private Node head;
@@ -24,6 +24,7 @@ public class LinkedList {
     public void add(String key, ShoppingItem item){
         /* Node is at the start: new head*/
         if(head == null){
+            System.out.println("Added new head.\n");
             Node curr = new Node(key, item);
             head = curr;
         } else {
@@ -33,6 +34,7 @@ public class LinkedList {
             }
             Node curr = new Node(key, item);
             prev.next = curr;
+            System.out.println("Added new node.\n");
         }
         ++size;
     }
@@ -41,7 +43,7 @@ public class LinkedList {
         /* Finds wanted node by looping through up till end */
         Node node = head;
         while(node != null){
-            if(node.key == key){
+            if(node.key.equals(key)){
                 return node.item;
             }
             node = node.next;

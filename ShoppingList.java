@@ -4,13 +4,14 @@ import java.io.*;
 public class ShoppingList {
 
     public static void main(String[] args) throws FileNotFoundException {
+        ShoppingService[] services = new ShoppingService[2];
+        boolean done = false;
+
         System.out.println("-----------------------------");
         System.out.println("\tWelcome to ALaCarte");
         System.out.println("-----------------------------");
 
-        ShoppingService[] services = new ShoppingService[3];
         /* read in the config.txt */
-        System.out.println("Reading in config.txt...");
         File config_file = new File("config.txt");
         Scanner scanner = new Scanner(config_file);
 
@@ -21,13 +22,11 @@ public class ShoppingList {
             String[] tokens = config[1].split(",");
             ShoppingService service = new ShoppingService(tokens[0], tokens[1], Double.parseDouble(tokens[2]));
             services[index] = service;
-            service.printShoppingService();
             index++;
         }
 
         /* assign HashTables to each ShoppingService & populate by reading in respective their csv file */
         for( int i = 0; i < services.length; i++ ){
-            System.out.println("Reading in " + services[i].csv_file);
             File csv_file = new File(services[i].csv_file);
             Scanner csv_scanner = new Scanner(csv_file);
             while(csv_scanner.hasNextLine()){
@@ -40,39 +39,44 @@ public class ShoppingList {
                 String price_str = csv[3].substring(1);
                 double price = Double.parseDouble(price_str);
 
-                System.out.println("Brand: " + key);
-                System.out.println("Item: " + csv[1]);
-                System.out.println("Size: " + size + " oz");
-                System.out.println("Price: $" + price);
-                System.out.println();
-
-//                ShoppingItem new_item = new ShoppingItem(key, csv[1], size, price);
-//                services[i].hashtable.put(key, new_item);
-//                new_item.printShoppingItem();
+                ShoppingItem new_item = new ShoppingItem(key, csv[1], size, price);
+                services[i].hashtable.put(key, new_item);
             }
         }
 
         Scanner shoppingScanner = new Scanner(System.in);
         System.out.println("Let's start your shopping list.\n");
-        String response = "";
-        while(!response.equals("done")){
+        while( !done ){
             System.out.println("Enter your item or 'done': ");
-            response = shoppingScanner.next();
-            String key = response;
-            System.out.println("Size: ");
-            double size = shoppingScanner.nextInt();
+            String key = shoppingScanner.nextLine();
 
-            /* search through all the services */
-            services[0].total_price += services[0].searchPrice(key, size);
-            services[1].total_price += services[1].searchPrice(key, size);
-            services[2].total_price += services[2].searchPrice(key, size);
-            System.out.println("Added to cart.\n");
+            if( key.equals("done") ){
+                done = true;
+            } else {
+                System.out.println("Size: ");
+                double size = shoppingScanner.nextDouble();
+
+                /* search through all the services */
+                System.out.println("Searching...");
+                ShoppingItem item_0 = services[0].searchItem(key, size);
+                if( item_0 != null ){
+                    services[0].total_price += item_0.price;
+                }
+                ShoppingItem item_1 = services[1].searchItem(key, size);
+                if( item_1 != null ) {
+                    services[1].total_price += item_1.price;
+                }
+                // services[2].total_price += services[2].searchPrice(key, size);
+                if( !(item_0 == null && item_1 == null )){
+                    System.out.println("Added to cart.\n");
+                }
+            }
         }
 
         /* add delivery fee */
         services[0].total_price += services[0].delivery_charge;
         services[1].total_price += services[1].delivery_charge;
-        services[2].total_price += services[2].delivery_charge;
+        //services[2].total_price += services[2].delivery_charge;
 
         ShoppingService bestService = services[0];
         double bestPrice = services[0].total_price;
@@ -83,6 +87,7 @@ public class ShoppingList {
             }
         }
 
+        System.out.println("");
         System.out.println("Best price through " + bestService.service + ". Your total cost: $" + bestPrice);
 
     }

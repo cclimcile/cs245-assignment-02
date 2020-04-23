@@ -1,10 +1,10 @@
 public class HashTable {
-    LinkedList[] data; /* array of the LinkedList of the values */
+    LinkedList[] hash; /* array of the LinkedList of the values */
     int listLength;
 
     public HashTable(){
         listLength = 10;
-        data = new LinkedList[listLength];
+        hash = new LinkedList[listLength];
     }
 
     /**
@@ -31,18 +31,24 @@ public class HashTable {
      * @param value
      * @return
      */
-    boolean put(String key, ShoppingItem value){
+    void put(String key, ShoppingItem value){ //return type initially bool
         int index = getHashCode(key);
+        System.out.println("Index: " + index);
         /* check the LinkedList for collisions */
-        LinkedList list = data[index];
-        list.add(key, value);
-        return false;
+        if( hash[index] == null ){
+            System.out.println("Adding new to hashtable ....");
+            LinkedList list = new LinkedList();
+            hash[index] = list;
+            list.add(key, value);
+        } else {
+            System.out.println("Adding to hashtable ....");
+            hash[index].add(key, value);
+        }
     }
 
     ShoppingItem getItem(String key){
         int index = getHashCode(key);
-        LinkedList list = data[index];
-        ShoppingItem item = list.get(key);
+        ShoppingItem item = hash[index].get(key);
         return item;
     }
 }
