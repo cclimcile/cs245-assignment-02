@@ -33,15 +33,12 @@ public class HashTable {
      */
     void put(String key, ShoppingItem value){ //return type initially bool
         int index = getHashCode(key);
-        System.out.println("Index: " + index);
         /* check the LinkedList for collisions */
         if( hash[index] == null ){
-            System.out.println("Adding new to hashtable ....");
             LinkedList list = new LinkedList();
             hash[index] = list;
             list.add(key, value);
         } else {
-            System.out.println("Adding to hashtable ....");
             hash[index].add(key, value);
         }
     }

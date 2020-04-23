@@ -44,9 +44,10 @@ public class ShoppingList {
             }
         }
 
-        Scanner shoppingScanner = new Scanner(System.in);
+
         System.out.println("Let's start your shopping list.\n");
         while( !done ){
+            Scanner shoppingScanner = new Scanner(System.in);
             System.out.println("Enter your item or 'done': ");
             String key = shoppingScanner.nextLine();
 
@@ -57,15 +58,17 @@ public class ShoppingList {
                 double size = shoppingScanner.nextDouble();
 
                 /* search through all the services */
-                System.out.println("Searching...");
                 ShoppingItem item_0 = services[0].searchItem(key, size);
-                if( item_0 != null ){
-                    services[0].total_price += item_0.price;
-                }
                 ShoppingItem item_1 = services[1].searchItem(key, size);
-                if( item_1 != null ) {
-                    services[1].total_price += item_1.price;
+                if( item_0 != null && item_1 != null){
+                    System.out.println("Quantity: ");
+                    int quantity = shoppingScanner.nextInt();
+                    services[0].total_price += (quantity * item_0.price);
+                    services[1].total_price += (quantity * item_1.price);
+                } else {
+                    System.out.println("No such item/ size.");
                 }
+
                 // services[2].total_price += services[2].searchPrice(key, size);
                 if( !(item_0 == null && item_1 == null )){
                     System.out.println("Added to cart.\n");
@@ -88,7 +91,11 @@ public class ShoppingList {
         }
 
         System.out.println("");
-        System.out.println("Best price through " + bestService.service + ". Your total cost: $" + bestPrice);
+        System.out.print("Best price through " + bestService.service + ". Your total cost: $");
+        System.out.printf("%.2f\n", bestPrice);
+        System.out.println("-------------------------------");
+        System.out.println("Thank you for shopping with us!");
+        System.out.println("-------------------------------");
 
     }
 }

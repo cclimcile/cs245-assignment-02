@@ -23,12 +23,7 @@ public class ShoppingService {
     ShoppingItem searchItem(String key, double size){
 
         ShoppingItem item = this.hashtable.getItem(key);
-        if( item == null){
-            System.out.println("No such item.");
-            return null;
-        }
-        if( item.size % size != 0 ){
-            System.out.println("No such size.");
+        if( item == null || item.size % size != 0 ){
             return null;
         }
         return item;

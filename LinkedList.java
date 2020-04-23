@@ -24,7 +24,6 @@ public class  LinkedList {
     public void add(String key, ShoppingItem item){
         /* Node is at the start: new head*/
         if(head == null){
-            System.out.println("Added new head.\n");
             Node curr = new Node(key, item);
             head = curr;
         } else {
@@ -34,7 +33,6 @@ public class  LinkedList {
             }
             Node curr = new Node(key, item);
             prev.next = curr;
-            System.out.println("Added new node.\n");
         }
         ++size;
     }
