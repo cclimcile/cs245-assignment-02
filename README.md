@@ -27,8 +27,9 @@ For this program, I chose to use a mixture of HashTables and LinkedLists.
 
 (1) HashTables
         I chose the data structure HashTable as I found it an effective way to store keys and ShoppingItems. The fastest way 
-        to find any given vairable in an array is if we know the index of the item. For example, if I have an int[] arr = 
-        {Amy, Lucy, Jill}, instead for parsing through all elements in the array to find 'Jill', I can use arr[2]. Thus, by           fixing items to have a given array, I cut my search time significantly. My HashTable, hash, is a LinkedList array as 
+        to find any given variable in an array is if we know the index of the item. For example, if I have an int[] arr = 
+        {Amy, Lucy, Jill}, instead for parsing through all elements in the array to find 'Jill', I can use arr[2]. Thus, by           
+        fixing items to have a given array, I cut my search time significantly. My HashTable, hash, is a LinkedList array as 
         LinkedLists allowed me to avoid collisions when a ShoppingItem from a specific service was added. Each node in the 
         LinkedList consisted of a String[] keys and a ShoppingItem item. This allowed both options of keys (brand name and 
         brand_item name) to be stored in keys, and the other information, such as the item's price and weight, to be stored.
