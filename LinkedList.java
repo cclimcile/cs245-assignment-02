@@ -1,3 +1,8 @@
+/**
+ * This class uses the data structure LinkedList to organize support implementation of HashTables.
+ *
+ * @author Chiara Lim
+ **/
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;

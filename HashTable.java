@@ -1,3 +1,8 @@
+/**
+ * This class uses the data structure HashTables to organize a service's inventory.
+ *
+ * @author Chiara Lim
+ **/
 public class HashTable {
     LinkedList[] hash; /* array of the LinkedList of the values */
     int listLength;

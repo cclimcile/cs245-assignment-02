@@ -1,3 +1,8 @@
+/**
+ * Objects of this class stores information on a given item from a store.
+ *
+ * @author Chiara Lim
+ **/
 public class ShoppingItem {
     String brand;
     String item;

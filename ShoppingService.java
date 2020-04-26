@@ -1,3 +1,8 @@
+/**
+ * Objects from this class stores information on a specific service. This is how I commit data to memory.
+ *
+ * @author Chiara Lim
+ **/
 public class ShoppingService {
 
     String service, csv_file;
@@ -22,14 +27,20 @@ public class ShoppingService {
         this.isEliminated = false;
     }
 
+    /**
+     * Searches for a given item based on key given by client and size given by client.
+     * If the item does not exist in the service's hashtable, this returns null to represent
+     * 'NOT FOUND'.
+     * @param key
+     * @param size
+     * @return
+     * @throws NullPointerException
+     */
     ShoppingItem searchItem(String key, double size) throws NullPointerException{
         ShoppingItem item = this.hashtable.getItem(key, size);
         if( item == null || item.size / size != 1 ){
             return null;
         }
-//        System.out.println(item.brand_item);
-//        System.out.println(item.size);
-//        System.out.println();
         return item;
     }
 

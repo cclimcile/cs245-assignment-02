@@ -1,3 +1,13 @@
+/**
+ * This is the driver program. Structure:
+ * (1) Reads in config.txt
+ * (2) Reads in csv files and stores information from each service
+ * (3) Interactive Program Begins: client can enter his shopping list, one item at a time
+ * (4) Searches for item from each service and eliminates services accordingly
+ * (5) When client is done, calculates cheapest grocery delivery service.
+ *
+ * @author Chiara Lim
+ **/
 import javax.sound.sampled.EnumControl;
 import java.util.*;
 import java.io.*;
