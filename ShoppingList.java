@@ -4,12 +4,9 @@ import java.io.*;
 
 public class ShoppingList {
 
-    public static void main(String[] args) throws FileNotFoundException, NumberFormatException, NullPointerException {
-        /* to accommodate more services, simply adjust the ShoppingService[i]
-         * where i refers to the number of services.
-         */
+    public static void main(String[] args) throws FileNotFoundException, NumberFormatException, NullPointerException, InputMismatchException {
         boolean done = false;
-        int num_services = 3;
+        int num_services = 3; // adjust this to accommodate more csv files
         ShoppingService[] services = new ShoppingService[num_services];
         int services_left = num_services;
         ShoppingService lastService = null;
@@ -61,11 +58,7 @@ public class ShoppingList {
                 String[] keys = new String[2];
                 keys[0] = new_item.brand;
                 keys[1] = new_item.brand_item;
-//                System.out.println("Key 1: " + keys[0]);
-//                System.out.println("Key 2: " + keys[1]);
-//                System.out.println("Size: " + new_item.size);
                 services[i].hashtable.put(keys, new_item);
-//                System.out.println();
             }
         }
 
@@ -99,7 +92,7 @@ public class ShoppingList {
 
                 ShoppingItem[] item = new ShoppingItem[num_services];
                 for (int src = 0; src < num_services; src++) {
-                    if( services[src].isEliminated == false){
+                    if (services[src].isEliminated == false) {
                         item[src] = services[src].searchItem(key, size);
                         /* This service does not have the requested item. This could be for 3 reasons:
                          * (1) The item is garbage/ no service has it.
@@ -116,19 +109,18 @@ public class ShoppingList {
                 if (services[0].hasItem == false && services[1].hasItem == false && services[2].hasItem == false) {
                     /* CASE: last service got an invalid item */
                     if (services_left == 1) {
-                        if( lastService == null ){
-                            for( int i = 0; i < num_services; i++ ){
-                                if( services[i].isEliminated == false ){
+                        /* case where 'done' is parsed before lastService is initialized */
+                        if (lastService == null) {
+                            for (int i = 0; i < num_services; i++) {
+                                if (services[i].isEliminated == false) {
                                     lastService = services[i];
                                     break;
                                 }
                             }
                         }
-                        //System.out.println("Last service, " + lastService.service + " does not have the item.");
                         lastService.hasItem = true;
                     } else {
                         /* reset all because item passed was not valid */
-                        //System.out.println("\t[X] INVALID! None of the remaining services had it.");
                         for (int i = 0; i < num_services; i++) {
                             if (services[i].isEliminated == false) {
                                 services[i].hasItem = true;
@@ -140,15 +132,14 @@ public class ShoppingList {
                     /* CASE: more or one service does not have the item */
                     /* ELIMINATION ROUND */
                     for (int j = 0; j < num_services; j++) {
+                        /* if the service doesn't have the item and hasn't been eliminated yet, eliminate it */
                         if (services[j].hasItem == false && services[j].isEliminated == false) {
-                            //System.out.println("\t[X] Eliminating " + services[j].service);
                             services[j].isEliminated = true;
                             services_left -= 1;
-                            //System.out.println("\tNumber of services left: " + services_left);
                         } else {
+                            /* initializes lastService if ShoppingList continues even if there is only one service left */
                             if (services_left == 1 && services[j].isEliminated == false) {
                                 lastService = services[j];
-                                //System.out.println("One remaining service: " + lastService.service);
                             }
                         }
                     }
@@ -160,138 +151,69 @@ public class ShoppingList {
                         /* if service has not been eliminated, it contains the requested item
                          * hence, we add it to the total price */
                         if (services[svc].isEliminated == false) {
-                            //System.out.println("\tAdding " + item[svc].brand_item + " of price $" + item[svc].price + " to " + services[svc].service);
                             services[svc].total_price += (quantity * item[svc].price);
-                            //System.out.println("\tTotal price: $" + services[svc].total_price);
-                            //System.out.println();
                         }
                     }
                     System.out.println("Added to cart.\n");
                 }
-
-                /* Now we check if it is CASE (1),(2),(3):
-                 * CASE (1): both previous == true but current == false ∴ none of the services have it
-                 * CASE (2): both previous == true but one current == true || one current == false
-                 */
-//                boolean lastContainsItem = true;
-//                for( int j = 0; j < num_services; j++ ){
-
-//                    /* if the service has not been eliminated and it is not the last service left */
-//                    if( services_left == 1 && services[j].isEliminated == false ){
-//                        System.out.println("Checking " + services[j].service);
-//                        System.out.println("\tServices left: " + services_left);
-//                        /* last service */
-//                        /* CASE: the last service does not contain requested item
-//                         * SOLUTION: ignore that item */
-//                        item[j] = services[j].searchItem(key, size);
-//                        if( item[j] == null ){
-//                            System.out.println("\t[X] The last service does not have the item");
-//                            lastContainsItem = false;
-//                        }
-//                    } else if( services[j].isEliminated == false && services_left != 1 ){
-//                        System.out.println("Checking " + services[j].service);
-//                        System.out.println("\tServices left: " + services_left);
-//                        item[j] = services[j].searchItem(key, size);
-//                        if( item[j] == null ){
-//                            System.out.println("\t[X] Eliminating " + services[j].service);
-//                            /* reset everything */
-//                            services[j].isEliminated = true;
-//                            services_left -= 1;
-//                        }
-//                    }
-            }
-
-            /* ADDING PRICE TO A SERVICE'S TOTAL PRICE
-             * CONDITION: service has not been eliminated
-             */
-
-            /* CASE: requested item DNE in any of the services
-             * SOLUTION: ignore that item */
-//                if( services_left == 0 ) {
-//                    /* item DNE in any service */
-//                    System.out.println("No such item/ size.\n");
-//                    /* reset all services */
-//                    services[0].isEliminated = false;
-//                    services[1].isEliminated = false;
-//                    services_left = num_services;
-//                } else if( lastContainsItem == false ){
-//                    System.out.println("so... about that last service");
-//                    System.out.println("No such item/ size.\n");
-//                } else {
-//                    /* there exists a service that contains the item */
-//                    System.out.println("Quantity: ");
-//                    int quantity = shoppingScanner.nextInt();
-//                    for( int svc = 0; svc < num_services; svc++ ){
-//                        /* if service has not been eliminated, it contains the requested item
-//                         * hence, we add it to the total price */
-//                        if( services[svc].isEliminated == false ){
-//                            services[svc].total_price += (quantity * item[svc].price);
-//                        }
-//                    }
-//                    System.out.println("Added to cart.\n");
-//                }
-//            }
-//        }
-
-            }
-        /* CHECKING PRICES */
-
-        /* check if there's an empty cart */
-        boolean is_empty = true;
-        for (int i = 0; i < num_services; i++) {
-            if (services[i].total_price != 0.0) {
-                is_empty = false;
             }
         }
+            /* CHECKING PRICES */
 
-        double bestPrice = 0.0;
-        ShoppingService bestService = null;
-        if (is_empty == true) {
-            System.out.println("\nYour cart was empty!");
-        } else {
-            /* ADD DELIVERY FEE */
-            if (services_left == 1) {
-                /* No need for comparision */
-                if( lastService == null ){
-                    System.out.println("last service was null");
-                    for( int i = 0; i < num_services; i++ ){
-                        if( services[i].isEliminated == false ){
-                            lastService = services[i];
-                            break;
-                        }
-                    }
-                }
-                bestService = lastService;
-                bestPrice = lastService.total_price + lastService.delivery_charge;
-            } else {
-                for (int i = 0; i < num_services; i++) {
-                    /* if the service has not been eliminated, add delivery fee */
-                    if (services[i].isEliminated == false) {
-                        services[i].total_price += services[i].delivery_charge;
-                        /* if bestService has not been initialized, do it */
-                        if (bestService == null) {
-                            bestService = services[i];
-                            bestPrice = services[i].total_price;
-                        }
-                    }
-                }
-
-                for (int j = 0; j < num_services; j++) {
-                    /* if the next service has a better price, update bestService */
-                    if (!services[j].isEliminated && services[j].total_price < bestPrice) {
-                        bestService = services[j];
-                        bestPrice = services[j].total_price;
-                    }
+            /* check if there's an empty cart */
+            boolean is_empty = true;
+            for (int i = 0; i < num_services; i++) {
+                if (services[i].total_price != 0.0) {
+                    is_empty = false;
                 }
             }
-            System.out.println("");
-            System.out.print("Best price through " + bestService.service + ". Your total cost: $");
-            System.out.printf("%.2f\n", bestPrice);
+
+            /* these variables keep track of the cheapest service */
+            double bestPrice = 0.0;
+            ShoppingService bestService = null;
+            if (is_empty == true) {
+                System.out.println("\nYour cart was empty!");
+            } else {
+                /* ADD DELIVERY FEE */
+                if (services_left == 1) {
+                    /* If there is only one service in the running, the is no need for comparision */
+                    if (lastService == null) {
+                        for (int i = 0; i < num_services; i++) {
+                            if (services[i].isEliminated == false) {
+                                lastService = services[i];
+                                break;
+                            }
+                        }
+                    }
+                    bestService = lastService;
+                    bestPrice = lastService.total_price + lastService.delivery_charge;
+                } else {
+                    for (int i = 0; i < num_services; i++) {
+                        /* if the service has not been eliminated, add delivery fee */
+                        if (services[i].isEliminated == false) {
+                            services[i].total_price += services[i].delivery_charge;
+                            /* if bestService has not been initialized, do it */
+                            if (bestService == null) {
+                                bestService = services[i];
+                                bestPrice = services[i].total_price;
+                            }
+                        }
+                    }
+
+                    for (int j = 0; j < num_services; j++) {
+                        /* if the next service has a better price, update bestService */
+                        if (!services[j].isEliminated && services[j].total_price < bestPrice) {
+                            bestService = services[j];
+                            bestPrice = services[j].total_price;
+                        }
+                    }
+                }
+                System.out.println("");
+                System.out.print("Best price through " + bestService.service + ". Your total cost: $");
+                System.out.printf("%.2f\n", bestPrice);
         }
         System.out.println("-------------------------------");
         System.out.println("Thank you for shopping with us!");
         System.out.println("-------------------------------");
     }
 }
-
-
