@@ -1,11 +1,9 @@
 public class ShoppingService {
 
-    String service;
-    String csv_file;
-    double delivery_charge;
+    String service, csv_file;
+    double delivery_charge, total_price;
     HashTable hashtable;
-    double total_price;
-    boolean isEliminated;
+    boolean hasItem, isEliminated;
 
     /**
      * ShoppingService constructor. This stores information on a given service by pulling
@@ -19,7 +17,8 @@ public class ShoppingService {
         this. csv_file = csv_file;
         this.delivery_charge = delivery_charge;
         this.hashtable = new HashTable();
-        this.total_price = 0; /* used when comparing which service is cheapest */
+        this.total_price = 0.0;
+        this.hasItem = true;
         this.isEliminated = false;
     }
 
