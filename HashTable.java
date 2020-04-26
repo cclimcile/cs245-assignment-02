@@ -61,7 +61,7 @@ public class HashTable {
      * @return ShoppingItem
      * @throws NullPointerException
      */
-    ShoppingItem getItem(String key) throws NullPointerException {
+    ShoppingItem getItem(String key, double size) throws NullPointerException {
         /* finds appropriate key based on brand name to find correct index */
         String brand = findBrandName(key);
         if( brand == null ){
@@ -70,7 +70,7 @@ public class HashTable {
 
         int index = getHashCode(brand);
         /* retrieves item based on index in hashtable */
-        ShoppingItem item = hash[index].get(key);
+        ShoppingItem item = hash[index].get(key, size);
 
         return item;
     }

@@ -50,12 +50,19 @@ public class  LinkedList {
      * @param key
      * @return ShoppingItem
      */
-    public ShoppingItem get(String key){
+    public ShoppingItem get(String key, double size){
         /* Finds wanted node by looping through up till end */
         Node node = head;
-        while(node != null){
-            /* if the key is either the brand name or brand + item name, the item exists */
-            if(node.keys[0].equals(key) || node.keys[1].equals(key) ){
+        while( node != null ){
+            /* if the key is brand name */
+            if( node.keys[0].equals(key) ){
+                /* case where same brand, different items */
+                if( node.item.size == size ){
+                    return node.item;
+                }
+            }
+            /* if the key is brand_item name */
+            if( node.keys[1].equals(key) ){
                 return node.item;
             }
             node = node.next;
@@ -63,5 +70,4 @@ public class  LinkedList {
         /* requested item doesn't not exist */
         return null;
     }
-
 }
